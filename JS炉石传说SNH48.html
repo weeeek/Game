@@ -1,0 +1,342 @@
+﻿<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Title</title>
+    <script src="http://cdn.static.runoob.com/libs/angular.js/1.4.6/angular.min.js"></script>
+    <style type="text/css">
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+            border: none;
+        }
+
+        html, body {
+            height: 100%;
+        }
+
+        .box, .player-box, .boss-box, .ground-box {
+            height: 100%;
+            display: -webkit-flex; /* Safari */
+            display: flex;
+        }
+
+        .box, .boss-box {
+            flex-direction: column;
+        }
+
+        .player-box {
+            flex-direction: column-reverse;
+        }
+
+        .ground-box {
+            flex-direction: row-reverse;
+            justify-content: center;
+        }
+
+        .boss, .player {
+            flex-grow: 1;
+        }
+
+        .boss {
+            background: #ebebeb;
+        }
+
+        .player {
+            background: #fff0f5;
+        }
+
+        .ground {
+            flex-grow: 1;
+            text-align: center;
+            width: 1000px;
+            margin: 0 auto;
+        }
+
+        .hero {
+            flex-grow: 1;
+            text-align: center;
+        }
+
+        .hand {
+            flex-grow: 1;
+            flex-basis: 300px;
+            text-align: center;
+            position: relative;
+            height: 300px
+        }
+
+        .retinue {
+            display: inline-block;
+            width: calc(100% / 7 - 26px);
+            margin: 10px;
+            height: 100%;
+        }
+
+        .card {
+            /*600x800*/
+            position: absolute;
+            display: block;
+            width: 150px;
+            height: 200px;
+            transform: translateX(-50%);
+            -webkit-transform: translateX(-50%);
+            transform-origin: 50% 100%;
+            -webkit-transform-origin: 50% 100%;
+            -webkit-box-shadow: 0 2px 4px #bbb;
+            box-shadow: 0 2px 4px #bbb;
+            -webkit-transition: all .24s linear;
+            transition: all .24s linear;
+        }
+
+            .card:hover {
+                -webkit-box-shadow: 0 0px 50px greenyellow;
+                box-shadow: 0 0px 50px greenyellow;
+            }
+
+        /*.retinue:hover {
+            -webkit-box-shadow: 0 4px 8px #bbb;
+            box-shadow: 0 4px 8px #bbb;
+            -webkit-transform: translateY(-4px);
+            transform: translateY(-4px);
+        }*/
+
+        .can-attack {
+            -webkit-box-shadow: 0 0px 15px greenyellow;
+            box-shadow: 0 0px 15px greenyellow;
+        }
+    </style>
+    <style>
+        .card-10 .card:nth-child(10n+1) {
+            transform: rotate(-25deg);
+            left: calc(32% - 75px);
+            top: 46px;
+        }
+
+        .card-10 .card:nth-child(10n+2) {
+            transform: rotate(-20deg);
+            left: calc(36% - 75px);
+            top: 26px;
+        }
+
+        .card-10 .card:nth-child(10n+3) {
+            transform: rotate(-15deg);
+            left: calc(40% - 75px);
+            top: 14px;
+        }
+
+        .card-10 .card:nth-child(10n+4) {
+            transform: rotate(-10deg);
+            left: calc(44% - 75px);
+            top: 6px;
+        }
+
+        .card-10 .card:nth-child(10n+5) {
+            transform: rotate(-5deg);
+            left: calc(48% - 75px);
+            top: 0px;
+        }
+
+        .card-10 .card:nth-child(10n+6) {
+            transform: rotate(5deg);
+            left: calc(52% - 75px);
+            top: 0px;
+        }
+
+        .card-10 .card:nth-child(10n+7) {
+            transform: rotate(10deg);
+            left: calc(56% - 75px);
+            top: 6px;
+        }
+
+        .card-10 .card:nth-child(10n+8) {
+            transform: rotate(15deg);
+            left: calc(60% - 75px);
+            top: 14px;
+        }
+
+        .card-10 .card:nth-child(10n+9) {
+            transform: rotate(20deg);
+            left: calc(64% - 75px);
+            top: 26px;
+        }
+
+        .card-10 .card:nth-child(10n+10) {
+            transform: rotate(25deg);
+            left: calc(68% - 75px);
+            top: 46px;
+        }
+
+        .card-9 .card:nth-child(9n+1) {
+            transform: rotate(-20deg);
+            left: calc(34% - 75px);
+            top: 46px;
+        }
+        .card-9 .card:nth-child(9n+2) {
+            transform: rotate(-15deg);
+            left: calc(38% - 75px);
+            top: 26px;
+        }
+        .card-9 .card:nth-child(9n+3) {
+            transform: rotate(-10deg);
+            left: calc(42% - 75px);
+            top: 14px;
+        }
+        .card-9 .card:nth-child(9n+4) {
+            transform: rotate(-5deg);
+            left: calc(46% - 75px);
+            top: 6px;
+        }
+        .card-9 .card:nth-child(9n+5) {
+            transform: rotate(0);
+            left: calc(50% - 75px);
+            top: 0;
+        }
+        .card-9 .card:nth-child(9n+6) {
+            transform: rotate(5deg);
+            left: calc(54% - 75px);
+            top: 6px;
+        }
+        .card-9 .card:nth-child(9n+7) {
+            transform: rotate(10deg);
+            left: calc(58% - 75px);
+            top: 14px;
+        }
+        .card-9 .card:nth-child(9n+8) {
+            transform: rotate(15deg);
+            left: calc(62% - 75px);
+            top: 26px;
+        }
+        .card-9 .card:nth-child(9n+9) {
+            transform: rotate(20deg);
+            left: calc(66% - 75px);
+            top: 46px;
+        }
+    </style>
+</head>
+<!--打开网页即调用init()函数，显示已存数据-->
+<body ng-app="myApp" ng-controller="myCtrl">
+    <div class="box">
+        <div class="boss">
+            <div class="boss-box">
+                <div class="hand card-9">
+                    <img class="card" src="SR/SR1.jpg" />
+                    <img class="card" src="SR/SR2.jpg" />
+                    <img class="card" src="SR/SR3.jpg" />
+                    <img class="card" src="SR/SR4.jpg" />
+                    <img class="card" src="SR/SR5.jpg" />
+                    <img class="card" src="SR/SR6.jpg" />
+                    <img class="card" src="SR/SR7.jpg" />
+                    <img class="card" src="SR/SR8.jpg" />
+                    <img class="card" src="SR/SR9.jpg" />
+                </div>
+                <div class="hero"></div>
+                <div class="ground">
+                    <img class="retinue" src="SSR/SSR3.jpg" />
+                    <img class="retinue" src="SSR/SSR4.jpg" />
+                </div>
+            </div>
+        </div>
+        <div class="player">
+            <div class="player-box">
+                <div class="hand card-10">
+                    <img class="card" src="SSR/SSR1.jpg" />
+                    <img class="card" src="SSR/SSR1.jpg" />
+                    <img class="card" src="SSR/SSR1.jpg" />
+                    <img class="card" src="SSR/SSR1.jpg" />
+                    <img class="card" src="SSR/SSR1.jpg" />
+                    <img class="card" src="SSR/SSR1.jpg" />
+                    <img class="card" src="SSR/SSR1.jpg" />
+                    <img class="card" src="SSR/SSR1.jpg" />
+                    <img class="card" src="SSR/SSR1.jpg" />
+                    <img class="card" src="SSR/SSR1.jpg" />
+                </div>
+                <div class="hero"></div>
+                <div class="ground">
+                    <img class="retinue can-attack" src="SSR/SSR5.jpg" />
+                    <img class="retinue can-attack" src="SSR/SSR5.jpg" />
+                    <img class="retinue can-attack" src="SSR/SSR5.jpg" />
+                    <img class="retinue can-attack" src="SSR/SSR5.jpg" />
+                    <img class="retinue can-attack" src="SSR/SSR5.jpg" />
+                    <img class="retinue can-attack" src="SSR/SSR5.jpg" />
+                    <img class="retinue can-attack" src="SSR/SSR5.jpg" />
+                </div>
+            </div>
+        </div>
+    </div>
+    <script type="text/javascript" src="SSR/SSRs.js"></script>
+    <script type="text/javascript" src="heros.js"></script>
+    <script type="text/javascript" src="bosses.js"></script>
+    <script>
+        angular.module('myApp', []).controller('myCtrl', ['$scope', '$timeout', function ($scope, $timeout) {
+            $scope.cards = cards;
+
+
+            $scope.trigger = {
+                DoubleFunction: {
+                    Deathrattle: function (item) {
+                        for (var i = 0; i < 2; i++) {
+                            $scope.trigger.Deathrattle(item);
+                        }
+                    },
+                    Battlecry: function (item) {
+                        for (var i = 0; i < 2; i++) {
+                            $scope.trigger.Battlecry(item);
+                        }
+                    }
+                },
+                Deathrattle: function (card) {
+                    angular.forEach(card.property.Deathrattle, function (func, index) {
+                        func();
+                    });
+                },
+                Battlecry: function (card, target) {
+                    angular.forEach(card.property.Battlecry, function (func, index) {
+                        func(target);
+                    });
+                }
+            }
+
+            $scope.player = {
+                role: {},
+                deck: [],//牌组里的牌
+                hand: [],//手里的牌
+                ground: [],//己方战场上的随从
+                graveyard: [],//墓地里的牌
+                out: []//游戏区外的牌
+            }
+
+            $scope.boss = {
+                role: {},
+                deck: [],//牌组里的牌
+                hand: [],//手里的牌
+                ground: [],//己方战场上的随从
+                graveyard: [],//墓地里的牌
+                out: []//游戏区外的牌
+            }
+
+            $scope.commonFunction = {
+                //洗牌
+                shuffle: function (who) {
+                    if (who.deck.length > 1) {
+                        who.deck.sort(function () {
+                            return Math.random() > .5 ? -1 : 1;
+                            //用Math.random()函数生成0~1之间的随机数与0.5比较，返回-1或1
+                        });
+                    }
+                },
+                //抽排
+                draw: function (who) {
+                    if (who.deck.length > 0) {
+                        return who.deck.shift();
+                    } else {
+                        --who.role.HP;
+                        return null;
+                    }
+                }
+            }
+        }]);
+    </script>
+</body>
+</html>
